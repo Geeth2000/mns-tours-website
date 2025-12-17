@@ -229,6 +229,27 @@ After seeding the database, you can login with:
 - Error handling
 - Form validation
 
+## Security Considerations
+
+### Current Implementation
+- JWT-based authentication
+- Password hashing with bcryptjs
+- Protected routes
+- Role-based access control
+- Secure email validation regex
+
+### Production Recommendations
+For production deployment, consider adding:
+- **Rate limiting**: Use `express-rate-limit` to prevent abuse
+  ```bash
+  npm install express-rate-limit
+  ```
+- **Helmet.js**: Add security headers
+- **CORS configuration**: Restrict to specific domains
+- **Input sanitization**: Use `express-mongo-sanitize`
+- **HTTPS**: Always use SSL/TLS in production
+- **Environment variables**: Keep secrets secure and never commit .env files
+
 ## Development
 
 ### Backend Development
