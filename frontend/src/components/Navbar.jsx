@@ -1,12 +1,41 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const isPathActive = (path) =>
+    location.pathname === path || location.pathname.startsWith(`${path}/`);
+
+  const getDesktopLinkClass = (path) => {
+    const base = "text-gray-700 hover:text-primary-500 transition";
+    return isPathActive(path) ? `${base} text-primary-600 font-semibold` : base;
+  };
+
+  const getDesktopCtaClass = (path) => {
+    const base =
+      "bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition";
+    return isPathActive(path) ? `${base} bg-primary-600` : base;
+  };
+
+  const getMobileLinkClass = (path) => {
+    const base =
+      "block px-3 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-500 rounded-md transition";
+    return isPathActive(path)
+      ? `${base} bg-primary-50 text-primary-600 font-semibold`
+      : base;
+  };
+
+  const getMobileCtaClass = (path) => {
+    const base =
+      "block px-3 py-2 bg-primary-500 text-white hover:bg-primary-600 rounded-md transition text-center";
+    return isPathActive(path) ? `${base} bg-primary-600` : base;
+  };
 
   const requestLogout = () => {
     setShowLogoutConfirm(true);
@@ -39,50 +68,32 @@ const Navbar = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <Link
-                to="/"
-                className="text-gray-700 hover:text-primary-500 transition"
-              >
+              <Link to="/" className={getDesktopLinkClass("/")}>
                 Home
               </Link>
-              <Link
-                to="/tours"
-                className="text-gray-700 hover:text-primary-500 transition"
-              >
+              <Link to="/tours" className={getDesktopLinkClass("/tours")}>
                 Tours
               </Link>
-              <Link
-                to="/vehicles"
-                className="text-gray-700 hover:text-primary-500 transition"
-              >
+              <Link to="/vehicles" className={getDesktopLinkClass("/vehicles")}>
                 Vehicles
               </Link>
-              <Link
-                to="/about"
-                className="text-gray-700 hover:text-primary-500 transition"
-              >
+              <Link to="/about" className={getDesktopLinkClass("/about")}>
                 About
               </Link>
-              <Link
-                to="/contact"
-                className="text-gray-700 hover:text-primary-500 transition"
-              >
+              <Link to="/contact" className={getDesktopLinkClass("/contact")}>
                 Contact
               </Link>
 
               {isAuthenticated ? (
                 <>
                   {isAdmin && (
-                    <Link
-                      to="/admin"
-                      className="text-gray-700 hover:text-primary-500 transition"
-                    >
+                    <Link to="/admin" className={getDesktopLinkClass("/admin")}>
                       Admin
                     </Link>
                   )}
                   <Link
                     to="/dashboard"
-                    className="text-gray-700 hover:text-primary-500 transition"
+                    className={getDesktopLinkClass("/dashboard")}
                   >
                     Dashboard
                   </Link>
@@ -95,15 +106,12 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Link
-                    to="/login"
-                    className="text-gray-700 hover:text-primary-500 transition"
-                  >
+                  <Link to="/login" className={getDesktopLinkClass("/login")}>
                     Login
                   </Link>
                   <Link
                     to="/register"
-                    className="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition"
+                    className={getDesktopCtaClass("/register")}
                   >
                     Register
                   </Link>
@@ -143,35 +151,35 @@ const Navbar = () => {
             <div className="px-2 pt-2 pb-3 space-y-1">
               <Link
                 to="/"
-                className="block px-3 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-500 rounded-md transition"
+                className={getMobileLinkClass("/")}
                 onClick={() => setIsOpen(false)}
               >
                 Home
               </Link>
               <Link
                 to="/tours"
-                className="block px-3 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-500 rounded-md transition"
+                className={getMobileLinkClass("/tours")}
                 onClick={() => setIsOpen(false)}
               >
                 Tours
               </Link>
               <Link
                 to="/vehicles"
-                className="block px-3 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-500 rounded-md transition"
+                className={getMobileLinkClass("/vehicles")}
                 onClick={() => setIsOpen(false)}
               >
                 Vehicles
               </Link>
               <Link
                 to="/about"
-                className="block px-3 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-500 rounded-md transition"
+                className={getMobileLinkClass("/about")}
                 onClick={() => setIsOpen(false)}
               >
                 About
               </Link>
               <Link
                 to="/contact"
-                className="block px-3 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-500 rounded-md transition"
+                className={getMobileLinkClass("/contact")}
                 onClick={() => setIsOpen(false)}
               >
                 Contact
@@ -182,7 +190,7 @@ const Navbar = () => {
                   {isAdmin && (
                     <Link
                       to="/admin"
-                      className="block px-3 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-500 rounded-md transition"
+                      className={getMobileLinkClass("/admin")}
                       onClick={() => setIsOpen(false)}
                     >
                       Admin
@@ -190,7 +198,7 @@ const Navbar = () => {
                   )}
                   <Link
                     to="/dashboard"
-                    className="block px-3 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-500 rounded-md transition"
+                    className={getMobileLinkClass("/dashboard")}
                     onClick={() => setIsOpen(false)}
                   >
                     Dashboard
@@ -206,14 +214,14 @@ const Navbar = () => {
                 <>
                   <Link
                     to="/login"
-                    className="block px-3 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-500 rounded-md transition"
+                    className={getMobileLinkClass("/login")}
                     onClick={() => setIsOpen(false)}
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
-                    className="block px-3 py-2 bg-primary-500 text-white hover:bg-primary-600 rounded-md transition text-center"
+                    className={getMobileCtaClass("/register")}
                     onClick={() => setIsOpen(false)}
                   >
                     Register
